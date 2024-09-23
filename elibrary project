@@ -1,0 +1,70 @@
+In a library management system, several key entities are typically involved in the database design. Here are some of the main entities you might encounter:
+
+1. **Books**: This entity represents the books available in the library. Attributes might include title, author, ISBN, genre, and publication year.
+2. **Authors**: This entity includes information about the authors of the books. Attributes might include name, biography, and nationality.
+3. **Borrowers**: This entity represents the library members who borrow books. Attributes might include member ID, name, contact information, and membership date.
+4. **Librarians**: This entity includes the staff members who manage the library operations. Attributes might include employee ID, name, position, and contact information.
+5. **Library Branches**: If the library has multiple branches, this entity represents each branch. Attributes might include branch ID, location, and contact information.
+6. **Transactions**: This entity records the borrowing and returning of books. Attributes might include transaction ID, borrower ID, book ID, borrow date, and return date.
+
+These entities are interconnected through various relationships, such as borrowing (between Borrowers and Books) and authorship (between Authors and Books) ¹².
+
+
+mysql> -u root -p;
+password root;
+show databases;
+CREATE DATABASE LibraryDB;
+USE LibraryDB;
+CREATE TABLE Books (
+    BookID INT PRIMARY KEY,
+    Title VARCHAR(100),
+    PublisherName VARCHAR(100),
+    PubYear YEAR
+);
+
+CREATE TABLE Authors (
+    AuthorID INT PRIMARY KEY,
+    AuthorName VARCHAR(100)
+);
+
+CREATE TABLE BookAuthors (
+    BookID INT,
+    AuthorID INT,
+    PRIMARY KEY (BookID, AuthorID),
+    FOREIGN KEY (BookID) REFERENCES Books(BookID),
+    FOREIGN KEY (AuthorID) REFERENCES Authors(AuthorID)
+);
+
+CREATE TABLE Members (
+    MemberID INT PRIMARY KEY,
+    MemberName VARCHAR(100),
+    MembershipDate DATE
+);
+
+CREATE TABLE BookLending (
+    LendingID INT PRIMARY KEY,
+    BookID INT,
+    MemberID INT,
+    DateOut DATE,
+    DueDate DATE,
+    FOREIGN KEY (BookID) REFERENCES Books(BookID),
+    FOREIGN KEY (MemberID) REFERENCES Members(MemberID)
+);
+
+INSERT INTO Books (BookID, Title, PublisherName, PubYear) VALUES (1, 'The Great Gatsby', 'Scribner', 1925);
+INSERT INTO Authors (AuthorID, AuthorName) VALUES (1, 'F. Scott Fitzgerald');
+INSERT INTO BookAuthors (BookID, AuthorID) VALUES (1, 1);
+INSERT INTO Members (MemberID, MemberName, MembershipDate) VALUES (1, 'John Doe', '2023-01-01');
+INSERT INTO BookLending (LendingID, BookID, MemberID, DateOut, DueDate) VALUES (1, 1, 1, '2023-09-01', '2023-09-15');
+
+SELECT * FROM Books;
+SELECT * FROM Members;
+SELECT Books.Title, Members.MemberName, BookLending.DateOut, BookLending.DueDate
+FROM BookLending
+JOIN Books ON BookLending.BookID = Books.BookID
+JOIN Members ON BookLending.MemberID = Members.MemberID;
+
+UPDATE Books SET Title = 'The Great Gatsby (Revised Edition)' WHERE BookID = 1;
+
+DELETE FROM Books WHERE BookID = 1;
+
