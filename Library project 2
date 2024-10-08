@@ -1,0 +1,191 @@
+Guide to use of mysql to perform library management 
+Library Database Management System.
+
+Database Name: library_db
+
+Tables:
+
+
+1. books
+2. authors
+3. borrowers
+4. borrowings
+
+
+*SQL Commands*
+
+
+1. Check existence of DB
+
+SHOW DATABASES LIKE 'library_db';
+
+
+2. *Create Database*
+
+CREATE DATABASE library_db;
+
+
+3. *Activate the database*
+
+USE library_db;
+
+
+4. *Create sample tables with primary key*
+
+
+CREATE TABLE books (
+  book_id INT PRIMARY KEY,
+  title VARCHAR(100),
+  author_id INT,
+  publication_date DATE
+);
+
+CREATE TABLE authors (
+  author_id INT PRIMARY KEY,
+  name VARCHAR(50),
+  birth_date DATE
+);
+
+CREATE TABLE borrowers (
+  borrower_id INT PRIMARY KEY,
+  name VARCHAR(50),
+  email VARCHAR(100)
+);
+
+CREATE TABLE borrowings (
+  borrowing_id INT PRIMARY KEY,
+  book_id INT,
+  borrower_id INT,
+  borrow_date DATE,
+  return_date DATE,
+  FOREIGN KEY (book_id) REFERENCES books(book_id),
+  FOREIGN KEY (borrower_id) REFERENCES borrowers(borrower_id)
+);
+
+
+5. *Check table structure*
+
+DESCRIBE books;
+DESCRIBE authors;
+DESCRIBE borrowers;
+DESCRIBE borrowings;
+
+
+6. *Remove Attribute*
+
+ALTER TABLE books DROP COLUMN publication_date;
+
+
+7. *Add Attributes*
+
+ALTER TABLE books ADD COLUMN genre VARCHAR(20);
+
+
+8. *Change Attribute Name*
+
+ALTER TABLE authors RENAME COLUMN name TO author_name;
+
+
+9. *Change Table name*
+
+RENAME TABLE books TO book_catalog;
+
+
+10. *Change size of attribute*
+
+ALTER TABLE book_catalog MODIFY COLUMN title VARCHAR(200);
+
+
+11. *In the event the primary key is not enforced*
+
+ALTER TABLE book_catalog ADD PRIMARY KEY (book_id);
+
+
+12. *Capture sample data*
+
+INSERT INTO authors (author_id, author_name, birth_date)
+VALUES
+  (1, 'J.K. Rowling', '1965-07-31'),
+  (2, 'J.R.R. Tolkien', '1892-01-03');
+
+INSERT INTO books (book_id, title, author_id, genre)
+VALUES
+  (1, 'Harry Potter and the Philosopher\'s Stone', 1, 'Fantasy'),
+  (2, 'The Lord of the Rings', 2, 'Fantasy');
+
+INSERT INTO borrowers (borrower_id, name, email)
+VALUES
+  (1, 'John Doe', 'john.doe@example.com'),
+  (2, 'Jane Doe', 'jane.doe@example.com');
+
+INSERT INTO borrowings (borrowing_id, book_id, borrower_id, borrow_date, return_date)
+VALUES
+  (1, 1, 1, '2022-01-01', '2022-01-15'),
+  (2, 2, 2, '2022-02-01', '2022-02-15');
+
+
+13. *DATA Retrieval DISTINCT*
+
+SELECT DISTINCT genre FROM books;
+
+
+14. *Use of Arithmetic operators, Calculated Fields, Renaming columns*
+
+SELECT 
+  book_id, 
+  title AS book_title, 
+  author_id, 
+  (book_id * 10) AS calculated_field 
+FROM 
+  books;
+
+
+15. *Other Comparison Operators*
+
+SELECT * FROM books WHERE title BETWEEN 'A' AND 'M';
+SELECT * FROM books WHERE author_id IN (1, 2);
+SELECT * FROM books WHERE title LIKE '%Harry%';
+SELECT * FROM books WHERE genre IS NULL;
+SELECT * FROM books WHERE genre IS NOT NULL;
+
+
+16. *Logical Conditions (AND, OR, NOT)*
+
+SELECT * FROM books WHERE author_id = 1 AND genre = 'Fantasy';
+SELECT * FROM books WHERE author_id = 1 OR genre = 'Fantasy';
+SELECT * FROM books WHERE NOT author_id = 1;
+
+
+17. *Column Assortment*
+
+SELECT 
+  book_id, 
+  title, 
+  author_id, 
+  genre 
+FROM 
+  books 
+ORDER BY 
+  title ASC;
+
+
+18. *Aggregate Function*
+
+SELECT 
+  author_id, 
+  COUNT(*) AS num_books 
+FROM 
+  books 
+GROUP BY 
+  author_id;
+
+
+19. *Group By*
+
+SELECT 
+  genre, 
+  COUNT(*) AS num_books 
+FROM 
+  books 
+GROUP BY 
+  genre;
