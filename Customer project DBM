@@ -1,0 +1,152 @@
+ Operations using MySQL:
+
+*1. Check existence of DB*
+SHOW DATABASES LIKE 'database_name';
+
+
+*2. Create Database*
+CREATE DATABASE database_name;
+
+*3. Activate the database*
+USE database_name;
+
+*4. Create sample tables with primary key*
+
+CREATE TABLE customers (
+  id INT PRIMARY KEY,
+  name VARCHAR(50),
+  email VARCHAR(100)
+);
+
+CREATE TABLE orders (
+  id INT PRIMARY KEY,
+  customer_id INT,
+  order_date DATE,
+  FOREIGN KEY (customer_id) REFERENCES customers(id)
+);
+
+
+*5. Check table structure*
+
+DESCRIBE customers;
+DESCRIBE orders;
+
+
+*6. Remove Attribute*
+
+ALTER TABLE customers DROP COLUMN email;
+
+
+*7. Add Attributes*
+
+ALTER TABLE customers ADD COLUMN phone VARCHAR(20);
+
+
+*8. Change Attribute Name*
+
+ALTER TABLE customers RENAME COLUMN name TO customer_name;
+
+
+*9. Change Table name*
+
+RENAME TABLE customers TO clients;
+
+
+*10. Change size of attribute*
+
+ALTER TABLE clients MODIFY COLUMN customer_name VARCHAR(100);
+
+
+*11. In the event the primary key is not enforced*
+
+ALTER TABLE clients ADD PRIMARY KEY (id);
+
+
+*12. Capture sample data*
+
+INSERT INTO clients (id, customer_name, phone)
+VALUES
+  (1, 'John Doe', '123-456-7890'),
+  (2, 'Jane Doe', '987-654-3210');
+
+INSERT INTO orders (id, customer_id, order_date)
+VALUES
+  (1, 1, '2022-01-01'),
+  (2, 1, '2022-01-15'),
+  (3, 2, '2022-02-01');
+
+
+*13. DATA Retrieval DISTINCT*
+
+SELECT DISTINCT customer_name FROM clients;
+
+
+*14. Use of Arithmetic operators, Calculated Fields, Renaming columns*
+
+SELECT 
+  id, 
+  customer_name AS name, 
+  phone, 
+  (id * 10) AS calculated_field 
+FROM 
+  clients;
+
+
+*15. Comparison Operators*
+
+SELECT * FROM clients WHERE customer_name = 'John Doe';
+SELECT * FROM clients WHERE customer_name != 'John Doe';
+SELECT * FROM clients WHERE customer_name > 'John Doe';
+
+
+*16. Other Comparison Operators*
+
+SELECT * FROM orders WHERE order_date BETWEEN '2022-01-01' AND '2022-01-31';
+SELECT * FROM clients WHERE customer_name IN ('John Doe', 'Jane Doe');
+SELECT * FROM clients WHERE customer_name LIKE '%Doe%';
+SELECT * FROM clients WHERE phone IS NULL;
+SELECT * FROM clients WHERE phone IS NOT NULL;
+
+
+*17. Logical Conditions (AND, OR, NOT)*
+
+SELECT * FROM clients WHERE customer_name = 'John Doe' AND phone = '123-456-7890';
+SELECT * FROM clients WHERE customer_name = 'John Doe' OR phone = '987-654-3210';
+SELECT * FROM clients WHERE NOT customer_name = 'John Doe';
+
+
+*18. Column Assortment, Aggregate Function*
+
+SELECT 
+  customer_name, 
+  COUNT(*) AS num_orders 
+FROM 
+  clients 
+  JOIN orders ON (link unavailable) = orders.customer_id 
+GROUP BY 
+  customer_name 
+ORDER BY 
+  num_orders DESC;
+
+
+*19. Group By*
+
+SELECT 
+  customer_name, 
+  SUM(order_date) AS total_orders 
+FROM 
+  clients 
+  JOIN orders ON (link unavailable) = orders.customer_id 
+GROUP BY 
+  customer_name;
+
+
+Some additional MySQL functions:
+
+
+CONCAT()- concatenate strings
+LENGTH()` - get string length
+UPPER()/LOWER()- convert to uppercase/lowercase
+ROUND()- round numbers
+NOW()- get current timestamp
+
