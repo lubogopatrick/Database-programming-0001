@@ -1,11 +1,11 @@
 In a library management system, several key entities are typically involved in the database design. Here are some of the main entities you might encounter:
 
-1. **Books**: This entity represents the books available in the library. Attributes might include title, author, ISBN, genre, and publication year.
-2. **Authors**: This entity includes information about the authors of the books. Attributes might include name, biography, and nationality.
-3. **Borrowers**: This entity represents the library members who borrow books. Attributes might include member ID, name, contact information, and membership date.
-4. **Librarians**: This entity includes the staff members who manage the library operations. Attributes might include employee ID, name, position, and contact information.
-5. **Library Branches**: If the library has multiple branches, this entity represents each branch. Attributes might include branch ID, location, and contact information.
-6. **Transactions**: This entity records the borrowing and returning of books. Attributes might include transaction ID, borrower ID, book ID, borrow date, and return date.
+1. Books: This entity represents the books available in the library. Attributes might include title, author, ISBN, genre, and publication year.
+2. Authors: This entity includes information about the authors of the books. Attributes might include name, biography, and nationality.
+3. Borrowers: This entity represents the library members who borrow books. Attributes might include member ID, name, contact information, and membership date.
+4. Librarians: This entity includes the staff members who manage the library operations. Attributes might include employee ID, name, position, and contact information.
+5. Library Branches: If the library has multiple branches, this entity represents each branch. Attributes might include branch ID, location, and contact information.
+6. Transactions: This entity records the borrowing and returning of books. Attributes might include transaction ID, borrower ID, book ID, borrow date, and return date.
 
 These entities are interconnected through various relationships, such as borrowing (between Borrowers and Books) and authorship (between Authors and Books) ¹².
 
