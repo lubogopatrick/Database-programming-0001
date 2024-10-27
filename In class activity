@@ -1,0 +1,113 @@
+IN-CLASS ACTIVITY
+
+[Index and Stored procedures (Select, Insert, Delete, Update)]
+
+Consider the table below;
+
+Donation
+
+Donorid  Department.  Amount
+
+D/125.       CT                    25,000
+
+D/67.        555.                   12,000
+
+D 45.         CT                      15,000
+
+D/16.         ΝΟΥ
+
+D/7.            SOT
+
+D/350.          SOB                     11,000
+
+a. Create the table above called donation
+
+b. Create an index on the Depart nent attribute
+
+c. Create a stored procedure which does the following;
+
+1. Insert the records
+
+ii. Display the amount given per donor
+
+Display the total amount received by the computing department
+
+iv. Delete any record where the amount received is not captured
+
+V. Delete any record where the amount received is below a given amount
+
+vi. Display the total amount received by the institution using the OUT parameter
+
+vii. Change the name of department of any department
+
+viii. Display the number of donations received by the university using the OUT
+
+Solution 
+ SQL commands to complete 
+
+a. Create the table
+
+CREATE TABLE Donation (
+  Donor Id VARCHAR(10),
+  Department VARCHAR(10),
+  Amount INT
+);
+
+
+b. Create an index on the Department attribute
+
+CREATE INDEX idx_Department ON Donation (Department);
+
+
+*c. Create a stored procedure
+
+CREATE PROCEDURE sp_Donation_Management
+  @Amount INT = NULL,
+  @Department VARCHAR(10) = NULL,
+  @NewDepartmentName VARCHAR(10) = NULL,
+  @GivenAmount INT = NULL
+AS
+BEGIN
+  -- 1. Insert records
+  INSERT INTO Donation (Donorid, Department, Amount)
+  VALUES ('D/125', 'CT', 25000),
+         ('D/67', '555', 12000),
+         ('D/45', 'CT', 15000),
+         ('D/16', 'ΝΟΥ', NULL),
+         ('D/7', 'SOT', NULL),
+         ('D/350', 'SOB', 11000);
+
+  -- ii. Display amount given per donor
+  SELECT Donorid, SUM(Amount) AS TotalAmount
+  FROM Donation
+  GROUP BY Donorid;
+
+  -- iii. Display total amount received by Computing department
+  SELECT SUM(Amount) AS TotalAmount
+  FROM Donation
+  WHERE Department = 'CT';
+
+  -- iv. Delete records with no amount received
+  DELETE FROM Donation
+  WHERE Amount IS NULL;
+
+  -- v. Delete records with amount below a given amount
+  DELETE FROM Donation
+  WHERE Amount < @GivenAmount;
+
+  -- vi. Display total amount received by institution using OUT parameter
+  DECLARE @TotalAmount INT;
+  SELECT @TotalAmount = SUM(Amount) FROM Donation;
+  PRINT @TotalAmount;
+
+  -- vii. Change department name
+  UPDATE Donation
+  SET Department = @NewDepartmentName
+  WHERE Department = @Department;
+
+  -- viii. Display number of donations received by university using OUT parameter
+  DECLARE @DonationCount INT;
+  SELECT @DonationCount = COUNT(*) FROM Donation;
+  PRINT @DonationCount;
+END;
+
