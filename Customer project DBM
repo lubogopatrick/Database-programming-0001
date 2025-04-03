@@ -3,7 +3,6 @@
 1. Check existence of DB
 SHOW DATABASES LIKE 'database_name';
 
-
 2. Create Database
 CREATE DATABASE database_name;
 
